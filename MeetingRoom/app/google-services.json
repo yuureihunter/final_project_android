@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "842794707683",
+    "firebase_url": "https://meetingroom-66f30.firebaseio.com",
+    "project_id": "meetingroom-66f30",
+    "storage_bucket": "meetingroom-66f30.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:842794707683:android:0d6cd70eb3150282",
+        "android_client_info": {
+          "package_name": "com.example.pimpavee.meetingroom"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "842794707683-d6cilksf8hffbu3ai0mg5c5j7prhcv5b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pimpavee.meetingroom",
+            "certificate_hash": "e5de523d92367b61b982f9587666a95b63749483"
+          }
+        },
+        {
+          "client_id": "842794707683-3elqf44984k4sss0scj38pagp59i6lvu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVy8hurVZFIH3hjHeUl94mzybuY34JNpY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "842794707683-3elqf44984k4sss0scj38pagp59i6lvu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
