@@ -3,6 +3,9 @@ package com.example.pimpavee.meetingroom;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +20,8 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,11 +36,20 @@ public class MainActivity extends AppCompatActivity {
     private AccessToken accessToken;
 
     private TextView textViewName, textViewEmail, textViewID;
+    private Button buttonAdd;
+
+    private RecyclerView recyclerView;
+
+    private DatabaseReference mDatabase;
+
+    String userName, firstName, lastName, email, id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -49,9 +63,19 @@ public class MainActivity extends AppCompatActivity {
         textViewEmail = (TextView) findViewById(R.id.textViewEmail);
         textViewID = (TextView) findViewById(R.id.textViewID);
 
-        FirebaseUser user = firebaseAuth.getCurrentUser();
+        buttonAdd = (Button) findViewById(R.id.buttonAdd);
+
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+
 
         initializeFacebookLogin();
+
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, NewPostActivity.class));
+            }
+        });
     }
 
     private void initializeFacebookLogin() {
@@ -64,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 accessToken = loginResult.getAccessToken();
                 String userID = accessToken.getUserId();
 
-                GraphRequest graphRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                GraphRequest graphRequest = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         displayUserInfo(object);
@@ -90,7 +114,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void displayUserInfo(JSONObject object) {
-        String firstName = "", lastName = "", email = "", id = "";
+        userName = "";
+        firstName = "";
+        lastName = "";
+        email = "";
+        id = "";
 
         try {
             firstName = object.getString("first_name");
@@ -100,10 +128,11 @@ public class MainActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        textViewName.setText(firstName + " " + lastName);
+        userName = firstName + " " + lastName;
+        textViewName.setText(userName);
         textViewEmail.setText("Email : " + email);
         textViewID.setText("ID : " + id);
+        writeNewUser(id, userName, email);
     }
 
     @Override
@@ -111,8 +140,13 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if (currentUser != null){
-
         }
+    }
+
+    private void writeNewUser(String userId, String username, String email) {
+        User user = new User(username, email);
+
+        mDatabase.child("users").child(userId).setValue(user);
     }
 
     @Override
